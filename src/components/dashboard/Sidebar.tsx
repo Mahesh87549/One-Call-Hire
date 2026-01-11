@@ -1,7 +1,9 @@
-import { Home, Users, Briefcase, FileText, Settings, LogOut, Menu, Smartphone } from 'lucide-react'
+import { Home, Users, LogOut, Menu, Smartphone } from 'lucide-react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Button } from '../ui/Button'
 import { useAuth } from '../../context/AuthContext'
+import { ConfirmModal } from '../ui/ConfirmModal'
+import { useState } from 'react'
 
 interface SidebarProps {
   isOpen: boolean
@@ -11,18 +13,21 @@ interface SidebarProps {
 export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   const navigate = useNavigate()
   const { logout } = useAuth()
+  const [showLogoutModal, setShowLogoutModal] = useState(false)
 
   const handleLogout = () => {
+    setShowLogoutModal(true)
+  }
+
+  const confirmLogout = () => {
     logout()
+    setShowLogoutModal(false)
     navigate('/login')
   }
 
   const navItems = [
     { icon: Home, label: 'Dashboard', href: '/dashboard' },
     { icon: Users, label: 'Workers', href: '/dashboard/workers' },
-    { icon: Briefcase, label: 'Onboarding', href: '/dashboard/onboarding' },
-    { icon: FileText, label: 'Marketplace', href: '/dashboard/marketplace' },
-    { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
   ]
 
   return (
@@ -85,6 +90,15 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
           </Button>
         </div>
       </aside>
+
+      {/* Logout Confirmation Modal */}
+      <ConfirmModal
+        isOpen={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        onConfirm={confirmLogout}
+        title="Sign Out"
+        message="Are you sure you want to sign out? You will need to log in again to access your account."
+      />
     </>
   )
 }

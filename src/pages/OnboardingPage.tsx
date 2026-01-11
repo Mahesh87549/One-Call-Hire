@@ -52,8 +52,14 @@ export default function OnboardingPage() {
     const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file) {
-            setFormData({ ...formData, photo: file })
-            setPreviewUrl(URL.createObjectURL(file))
+            // Convert to base64 for localStorage persistence
+            const reader = new FileReader()
+            reader.onloadend = () => {
+                const base64String = reader.result as string
+                setFormData({ ...formData, photo: file })
+                setPreviewUrl(base64String)
+            }
+            reader.readAsDataURL(file)
         }
     }
 
@@ -71,7 +77,7 @@ export default function OnboardingPage() {
             skills: formData.skills.split(',').map(s => s.trim()).filter(Boolean),
             hourlyRate: parseInt(formData.hourlyRate) || 0,
             availability: formData.availability,
-            photo: previewUrl
+            photo: previewUrl // Save base64 string instead of blob URL
         }
 
         setTimeout(() => {
