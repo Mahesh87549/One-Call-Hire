@@ -8,23 +8,26 @@ import WorkersPage from './pages/WorkersPage'
 import OnboardingPage from './pages/OnboardingPage'
 
 import { WorkerProvider } from './context/WorkerContext'
+import { AuthProvider } from './context/AuthContext'
 
 export default function App() {
   return (
-    <Router>
-      <WorkerProvider>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route index element={<DashboardPage />} />
-            <Route path="workers" element={<WorkersPage />} />
-            <Route path="onboarding" element={<OnboardingPage />} />
-            <Route path="workers/:id/edit" element={<OnboardingPage />} />
-          </Route>
-        </Routes>
-      </WorkerProvider>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <WorkerProvider>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/dashboard" element={<DashboardLayout />}>
+              <Route index element={<DashboardPage />} />
+              <Route path="workers" element={<WorkersPage />} />
+              <Route path="onboarding" element={<OnboardingPage />} />
+              <Route path="workers/:id/edit" element={<OnboardingPage />} />
+            </Route>
+          </Routes>
+        </WorkerProvider>
+      </Router>
+    </AuthProvider>
   )
 }

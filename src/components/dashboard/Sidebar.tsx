@@ -1,6 +1,7 @@
 import { Home, Users, Briefcase, FileText, Settings, LogOut, Menu, Smartphone } from 'lucide-react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Button } from '../ui/Button'
+import { useAuth } from '../../context/AuthContext'
 
 interface SidebarProps {
   isOpen: boolean
@@ -9,6 +10,13 @@ interface SidebarProps {
 
 export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   const navigate = useNavigate()
+  const { logout } = useAuth()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
+
   const navItems = [
     { icon: Home, label: 'Dashboard', href: '/dashboard' },
     { icon: Users, label: 'Workers', href: '/dashboard/workers' },
@@ -70,7 +78,7 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
           <Button
             variant="ghost"
             className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 gap-3"
-            onClick={() => navigate('/')}
+            onClick={handleLogout}
           >
             <LogOut className="w-5 h-5" />
             Sign Out

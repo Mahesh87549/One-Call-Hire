@@ -3,8 +3,12 @@ import { motion } from 'framer-motion'
 import { Eye, EyeOff, Mail, ArrowRight, Smartphone } from 'lucide-react'
 import { Button } from '../components/ui/Button'
 import { Input } from '../components/ui/Input'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 export default function LoginPage() {
+    const navigate = useNavigate()
+    const { login } = useAuth()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
@@ -16,11 +20,12 @@ export default function LoginPage() {
         setError('')
         setIsLoading(true)
 
-        // Mock Authentication Logic
+        // Use AuthContext for authentication
         setTimeout(() => {
-            if (username === 'Mahesh' && password === '1') {
+            const success = login(username, password)
+            if (success) {
                 setIsLoading(false)
-                window.location.href = "/dashboard"
+                navigate('/dashboard')
             } else {
                 setIsLoading(false)
                 setError('Invalid credentials. Please try again.')
